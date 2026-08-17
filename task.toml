@@ -1,0 +1,51 @@
+[task]
+name = "TAPT-Caltech101-AgentEval"
+description = "Reproduce the TAPT zero-shot robust eval row (Caltech101) with bundled AdvIVLP/CleanIVLP checkpoints and calibration statistics: generate the AutoAttack pkl, run TAPTVLI clean + robust evals, and report Top-1 metrics."
+keywords = ["tapt", "cvpr2025", "test-time-adaptation", "adversarial-robustness", "clip", "paperbench", "paper-only"]
+
+[metadata]
+task_id = "PB2142-TAPT"
+domain = "computer-vision"
+subdomain = "adversarial-robustness"
+description = "Reproduce the robust-inference evaluation of the TAPT paper (CVPR 2025) on the Caltech101 row using the authors' pinned code (xinwong/TAPT 14d8d0e + xinwong/MMoP 44e38d4) and team-bundled ImageNet-derived assets: AdvIVLP (robust) and CleanIVLP checkpoints, and the four VLI embedding statistics. The agent must generate the adversarial pkl (AutoAttack, eps 1/255), run the clean and TAPTVLI (test-time prompt tuning) evals, and write metrics.json + REPORT.md to /workspace/submission/. The paper's Own training of ImageNet checkpoints is NOT required of the agent (team-bundled)."
+arxiv_id = "2411.13136"
+paper_title = "TAPT: Test-Time Adversarial Prompt Tuning for Robust Inference in Vision-Language Models"
+authors = ["Xin Wang", "Kai Chen", "Jiaming Zhang", "Jingjing Chen", "Xingjun Ma"]
+venue = "CVPR 2025"
+license = "MIT"
+author_repo_url = "https://github.com/xinwong/TAPT"
+pinned_commit_sha = "14d8d0e047a45c6bc31310241aab6e5ced78ac6a"
+
+[metadata.runtime_limits]
+memory_mb = 24576
+storage_mb = 20480
+gpus = 1
+preferred_gpu_type = "A100-40GB"
+wall_time_sec = 5400
+
+[metadata.tools]
+shell = true
+file_io = true
+web_search = false
+
+[metadata.network]
+enabled = true
+policy = "internet_allowed_with_blacklist"
+file = "network_blacklist.txt"
+
+[environment]
+build_timeout_sec = 3600
+network_mode = "public"
+cpus = 8
+memory_mb = 24576
+storage_mb = 20480
+gpus = 1
+gpu_types = ["A100-40GB", "H100"]
+
+[agent]
+timeout_sec = 5400
+
+[verifier]
+timeout_sec = 1800
+
+difficulty = ""

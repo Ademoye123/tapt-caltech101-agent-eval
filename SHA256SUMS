@@ -1,0 +1,3 @@
+2d99eb6251cd1773cd97b64ee1c25c9ee429226236fb2ea70c9bd8ef910ab160  environment/assets/output/train/imagenet/AdvIVLP/vit_b16_c2_ep100_batch32_2+2ctx_9depth_16shots/seed1/VLPromptLearner/model.pth.tar-100
+331234750fc7f77520e50d9565e8b6907b03565e30320da1401130db08c61f91  environment/data/caltech-101.zip
+43368008720561787c84e62aa4a07a648434861e8694dd823099c579eef3d99b  environment/assets/output/train/imagenet/AdvIVLP/vit_b16_c2_ep100_batch32_2+2ctx_9depth_clean_16shots/seed1/VLPromptLearner/model.pth.tar-100

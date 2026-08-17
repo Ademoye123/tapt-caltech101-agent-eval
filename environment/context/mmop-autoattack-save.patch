@@ -1,0 +1,29 @@
+diff --git a/trainers/adv_independentVL.py b/trainers/adv_independentVL.py
+index 88da8f3..6a2ea27 100644
+--- a/trainers/adv_independentVL.py
++++ b/trainers/adv_independentVL.py
+@@ -203,8 +203,8 @@ class AdvIVLP(TrainerX):
+         dataset_save_path = os.path.join(self.cfg.OUTPUT_DIR, self.cfg.DATASET.NAME + "_adv_dataset.pkl")
+         print(attack)
+ 
+-        if os.path.isfile(dataset_save_path):
+-            self.adv_test_pkl, _ = torch.load(dataset_save_path).tensors
++        if os.path.isfile(dataset_save_path) and os.environ.get("ADV_FORCE_SAVE") != "1":
++            self.adv_test_pkl, _ = torch.load(dataset_save_path, weights_only=False).tensors
+             return
+         
+         if attack == 'auto':
+@@ -250,9 +250,10 @@ class AdvIVLP(TrainerX):
+ 
+         adv_test_dataset = TensorDataset(self.adv_test_pkl, all_labels)
+ 
+-        # torch.save(adv_test_dataset, dataset_save_path)
+-
+-        # print(f"Saving to: {dataset_save_path}")
++        if not os.path.isfile(dataset_save_path) or os.environ.get("ADV_FORCE_SAVE") == "1":
++            os.makedirs(os.path.dirname(dataset_save_path), exist_ok=True)
++            torch.save(adv_test_dataset, dataset_save_path)
++            print(f"Saving to: {dataset_save_path}")
+ 
+     @torch.no_grad()
+     def test_adv(self, split=None):

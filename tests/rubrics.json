@@ -1,0 +1,54 @@
+{
+  "task_name": "TAPT-Caltech101-AgentEval",
+  "rubric_version": "0.1",
+  "reward_scale": [0.0, 1.0],
+  "sections": [
+    {
+      "id": "layout",
+      "name": "Submission layout and provenance",
+      "weight": 0.15,
+      "leaves": [
+        {"id": "layout.submission_dir", "weight": 0.25, "kind": "binary", "check": "submission dir exists with evaluation/ subdir", "notes": ""},
+        {"id": "layout.metrics_files", "weight": 0.25, "kind": "binary", "check": "metrics_adv_ivlp.json and metrics_clean_ivlp.json present", "notes": ""},
+        {"id": "layout.report_md", "weight": 0.25, "kind": "binary", "check": "REPORT.md present and non-empty", "notes": ""},
+        {"id": "layout.no_leaks", "weight": 0.25, "kind": "binary", "check": "no file named like paper/solution content copied under submission (sanity scan)", "notes": "anti-copy-paste guard"}
+      ]
+    },
+    {
+      "id": "schema",
+      "name": "metrics.json schema conformance",
+      "weight": 0.15,
+      "leaves": [
+        {"id": "schema.json_parses", "weight": 0.1, "kind": "binary", "check": "both metrics files parse as JSON", "notes": ""},
+        {"id": "schema.keys_exact", "weight": 0.3, "kind": "binary", "check": "exact required keys present (dataset, method, checkpoint, checkpoint_name, clean_top1, robust_top1, tap_before_top1, tap_after_top1, attack, eps, steps); CleanIVLP may omit robust_top1", "notes": ""},
+        {"id": "schema.types", "weight": 0.2, "kind": "binary", "check": "metric values are numbers in [0,100]|NaN for missing; attack==auto; eps==1/255; steps==100", "notes": ""},
+        {"id": "schema.checkpoint_tag", "weight": 0.2, "kind": "binary", "check": "checkpoint values match AdvIVLP / CleanIVLP respectively", "notes": ""},
+        {"id": "schema.determinism_field", "weight": 0.2, "kind": "binary", "check": "REPORT.md states pkl provenance (bundled vs generated + command)", "notes": "anti-fabrication traceability"}
+      ]
+    },
+    {
+      "id": "science",
+      "name": "Numeric validity and oracle match",
+      "weight": 0.5,
+      "leaves": [
+        {"id": "science.clean_top1_range", "weight": 0.05, "kind": "range", "check": "clean_top1 in [80, 96] for both checkpoints (sanity band; real zero-shot on Caltech101)", "notes": "band TBD at human review"},
+        {"id": "science.robust_top1_range", "weight": 0.05, "kind": "range", "check": "robust_top1 in [40, 86] (AA eps=1/255 on Caltech101)", "notes": "band TBD; paper table ~57-80"},
+        {"id": "science.clean_vs_robust", "weight": 0.1, "kind": "binary", "check": "robust_top1 <= clean_top1 + 1e-6 (robustness never exceeds clean)", "notes": ""},
+        {"id": "science.before_vs_after", "weight": 0.1, "kind": "binary", "check": "tap_before_top1 <= tap_after_top1 + 2.0 (TAPT improves or maintains)", "notes": ""},
+        {"id": "science.match_oracle_clean", "weight": 0.35, "kind": "tolerance", "check": "|agent clean_top1 - oracle clean_top1| <= 1.0 absolute", "notes": "oracle = solve.sh outputs on identical assets; tolerance to be locked at human review"},
+        {"id": "science.match_oracle_robust", "weight": 0.35, "kind": "tolerance", "check": "|agent robust_top1 - oracle robust_top1| <= 2.0 absolute", "notes": ""}
+      ]
+    },
+    {
+      "id": "process",
+      "name": "Process compliance",
+      "weight": 0.2,
+      "leaves": [
+        {"id": "process.no_downloads", "weight": 0.3, "kind": "binary", "check": "REPORT.md confirms only bundled/mounted assets used (no HF/ImageNet downloads)", "notes": ""},
+        {"id": "process.pinned_repos", "weight": 0.2, "kind": "binary", "check": "REPORT.md lists exact checkpoint paths used", "notes": ""},
+        {"id": "process.time_budget", "weight": 0.2, "kind": "binary", "check": "run finished within timeout (wall-clock tracked by platform)", "notes": ""},
+        {"id": "process.failure_honesty", "weight": 0.3, "kind": "binary", "check": "REPORT.md documents any failure/NaN honestly instead of fabricating numbers", "notes": ""}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+# Domains denied to the agent (and to the environment's pip/build step),
+# as sha256-concatenated blacklist lines for the platform's host-based filter.
+# Paper page mirrors:
+arxiv.org
+-- arxiv.org/abs/2411.13136
+-- arxiv.org/pdf/2411.13136
+openaccess.thecvf.com
+-- openaccess.thecvf.com/content/CVPR2025/papers/Wang_TAPT...
+paperswithcode.com
+-- paperswithcode.com/paper/tapt-test-time-adversarial-prompt-tuning-for
+openreview.net
+# The paper's own repositories (the point: no cloning; pinned copies are bundled):
+github.com/xinwong/TAPT
+github.com/xinwong/MMoP
+github.com/KaiyangZhou/Dassl.pytorch
+github.com/KaiyangZhou/CoOp
+# ViT-B/16 weights hosts (must use the bundled checkpoints only):
+huggingface.co
+-- huggingface.co/laion/CLIP-ViT-B-16-laion2B-s34B-b88K
+-- huggingface.co/openai/clip-vit-base-patch16
+-- huggingface.co/georgesung/llava_llama2_fedora
+pypi.org
+files.pythonhosted.org
+docs.python.org
+pytorch.org
+pt.bigmodel.cn
